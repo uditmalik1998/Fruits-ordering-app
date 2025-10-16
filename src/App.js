@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import Header from "./components/Header";
 import Main from "./components/Main";
 import jsonData from "./components/CardList/cardlist.json";
+import { Outlet } from "react-router-dom";
 
 function App() {
   const [data, setData] = useState({ data: jsonData, count: 0 });
@@ -21,11 +22,12 @@ function App() {
   return (
     <div className="App">
       <Header data={data} setInput={setInput} input={input} />
-      {displayData?.length > 0 ? (
+      <Outlet />
+      {/* {displayData?.length > 0 ? (
         <Main data={data} setData={setData} displayData={displayData} />
       ) : (
         <h1>Nothing to Show</h1>
-      )}
+      )} */}
     </div>
   );
 }

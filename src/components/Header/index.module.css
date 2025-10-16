@@ -97,4 +97,12 @@
   .link_none {
     display: none;
   }
+  .login_icon {
+    top: -0.8rem;
+    right: 1rem;
+  }
+  .cart_badge{
+    top: -1.3rem;
+    right: -0.1rem;
+  }
 }
