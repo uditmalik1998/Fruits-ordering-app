@@ -1,0 +1,11 @@
+.cardlist_container {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
+}
+
+@media only screen and (max-width: 480px) {
+  .cardlist_container {
+    grid-template-columns: 1fr;
+    justify-self: center;
+  }
+}
