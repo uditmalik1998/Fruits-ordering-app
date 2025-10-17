@@ -11,9 +11,14 @@
 .form_label {
   font-weight: 600;
   padding: 0.5rem;
+  display: flex;
+  flex-direction: column;
+  min-width: -webkit-fill-available;
 }
 .form_input {
   padding: 0.5rem 1rem;
+  border: 1px solid grey;
+  border-radius: 0.5rem;
 }
 .form_btn {
   width: -webkit-fill-available;
@@ -30,4 +35,10 @@
   font-size: 12px;
   min-width: -webkit-fill-available;
   padding-left: 0.5rem;
+}
+.admin_container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 70vh;
 }

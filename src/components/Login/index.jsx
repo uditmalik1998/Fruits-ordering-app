@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import styles from "./index.module.css";
 
 const Login = (props) => {
@@ -7,6 +7,7 @@ const Login = (props) => {
     setFormData = () => {},
     handleSubmit = () => {},
     setIsLogin = () => {},
+    errors = {},
   } = props;
 
   return (
@@ -22,6 +23,7 @@ const Login = (props) => {
           onChange={(e) => setFormData({ ...formData, email: e.target.value })}
         />
       </label>
+      {errors?.email && <span className={styles.err_msg}>{errors.email}</span>}
       <label htmlFor="password" className={styles.form_label}>
         Password:
         <input
@@ -35,6 +37,9 @@ const Login = (props) => {
           }
         />
       </label>
+      {errors?.password && (
+        <span className={styles.err_msg}>{errors.password}</span>
+      )}
       <button className={styles.form_btn} type="submit">
         Login
       </button>

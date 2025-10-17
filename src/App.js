@@ -1,9 +1,10 @@
 import "./App.css";
-import { useEffect, useState } from "react";
+import { useEffect, useState, createContext } from "react";
 import Header from "./components/Header";
-import Main from "./components/Main";
 import jsonData from "./components/CardList/cardlist.json";
 import { Outlet } from "react-router-dom";
+
+export const DataContext = createContext(null);
 
 function App() {
   const [data, setData] = useState({ data: jsonData, count: 0 });
@@ -15,19 +16,18 @@ function App() {
     }
     const res =
       data?.data?.length &&
-      data?.data?.filter((item) => item?.name?.toLowerCase()?.includes(input?.toLowerCase()));
+      data?.data?.filter((item) =>
+        item?.name?.toLowerCase()?.includes(input?.toLowerCase())
+      );
     setDisplayData(res);
   }, [input]);
 
   return (
     <div className="App">
-      <Header data={data} setInput={setInput} input={input} />
-      <Outlet />
-      {/* {displayData?.length > 0 ? (
-        <Main data={data} setData={setData} displayData={displayData} />
-      ) : (
-        <h1>Nothing to Show</h1>
-      )} */}
+      <DataContext value={{ displayData, setData, data }}>
+        <Header data={data} setInput={setInput} input={input} />
+        <Outlet />
+      </DataContext>
     </div>
   );
 }

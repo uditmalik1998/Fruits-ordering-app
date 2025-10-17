@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import styles from "./index.module.css";
 
 const SignUp = (props) => {
@@ -7,21 +7,43 @@ const SignUp = (props) => {
     setFormData = () => {},
     handleSubmit = () => {},
     setIsLogin = () => {},
+    errors = {},
   } = props;
 
   return (
     <form className={styles.form_container} onSubmit={handleSubmit}>
       <label htmlFor="name" className={styles.form_label}>
-        Name:
+        First Name:
         <input
           className={styles.form_input}
           type="text"
           id="name"
           name="name"
-          value={formData.name}
-          onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+          value={formData.firstname}
+          onChange={(e) =>
+            setFormData({ ...formData, firstname: e.target.value })
+          }
         />
       </label>
+      {errors?.firstname && (
+        <span className={styles.err_msg}>{errors.firstname}</span>
+      )}
+      <label htmlFor="name" className={styles.form_label}>
+        Last Name:
+        <input
+          className={styles.form_input}
+          type="text"
+          id="name"
+          name="name"
+          value={formData.lastname}
+          onChange={(e) =>
+            setFormData({ ...formData, lastname: e.target.value })
+          }
+        />
+      </label>
+      {errors?.lastname && (
+        <span className={styles.err_msg}>{errors.lastname}</span>
+      )}
       <label htmlFor="email" className={styles.form_label}>
         Email:
         <input
@@ -33,6 +55,7 @@ const SignUp = (props) => {
           onChange={(e) => setFormData({ ...formData, email: e.target.value })}
         />
       </label>
+      {errors?.email && <span className={styles.err_msg}>{errors.email}</span>}
       <label htmlFor="password" className={styles.form_label}>
         Password:
         <input
@@ -46,6 +69,9 @@ const SignUp = (props) => {
           }
         />
       </label>
+      {errors?.password && (
+        <span className={styles.err_msg}>{errors.password}</span>
+      )}
       <button className={styles.form_btn} type="submit">
         SignUp
       </button>

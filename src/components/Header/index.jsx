@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { IoSearch } from "react-icons/io5";
 import { MdLogin } from "react-icons/md";
+import { FaCartShopping } from "react-icons/fa6";
 import styles from "./index.module.css";
+import { Link } from "react-router-dom";
 
 const Header = (props) => {
   const [cartCount, setCartCount] = useState(0);
@@ -38,23 +40,33 @@ const Header = (props) => {
       </div>
       <div>
         <ul className={styles.header_links}>
-          <li>
-            <strong className={`${styles.link} ${styles.link_none}`}>
-              Home
-            </strong>
-          </li>
-          <li>
-            <strong className={`${styles.link} ${styles.link_none}`}>
-              About
-            </strong>
-          </li>
+          <Link className={`${styles.header_link} ${styles.link_none}`} to="/">
+            <li>
+              <strong className={`${styles.link}`}>Home</strong>
+            </li>
+          </Link>
+          <Link
+            className={`${styles.header_link} ${styles.link_none}`}
+            to="/admin"
+          >
+            <li>
+              <strong className={`${styles.link} ${styles.link_none}`}>
+                Admin
+              </strong>
+            </li>
+          </Link>
           <li
             className={`${styles.login_container} ${shake ? styles.shake : ""}`}
             onAnimationEnd={handleAnimation}
           >
-            <MdLogin className={`${styles.login_icon} ${styles.link}`} />
+            <FaCartShopping className={`${styles.cart_icon}`} />
             <span className={`${styles.cart_badge}`}>{cartCount}</span>
           </li>
+          <Link className={styles.header_link} to="/login">
+            <li className={`${styles.login_container}`}>
+              <MdLogin className={`${styles.login_icon} ${styles.link}`} />
+            </li>
+          </Link>
         </ul>
       </div>
     </header>
