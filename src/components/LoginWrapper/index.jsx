@@ -83,7 +83,7 @@ const LoginWrapper = (props) => {
       {isLogin ? (
         <Login
           formData={formData}
-          setFormData={sethttpsFormData}
+          setFormData={setFormData}
           handleSubmit={handleSubmitLogin}
           setIsLogin={setIsLogin}
           errors={errors}
