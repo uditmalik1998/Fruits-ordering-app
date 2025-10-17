@@ -2,8 +2,9 @@ import React, { useEffect, useState } from "react";
 import { IoSearch } from "react-icons/io5";
 import { MdLogin } from "react-icons/md";
 import { FaCartShopping } from "react-icons/fa6";
-import styles from "./index.module.css";
 import { Link } from "react-router-dom";
+import { GiFruitBowl } from "react-icons/gi";
+import styles from "./index.module.css";
 
 const Header = (props) => {
   const [cartCount, setCartCount] = useState(0);
@@ -25,7 +26,7 @@ const Header = (props) => {
 
   return (
     <header className={styles.header_container}>
-      <div className={styles.input_container}>
+      {/* <div className={styles.input_container}>
         <input
           className={styles.header_input}
           placeholder="search something"
@@ -37,7 +38,8 @@ const Header = (props) => {
         <span className={styles.icon_conatiner}>
           <IoSearch className={styles.search_icon} />
         </span>
-      </div>
+      </div> */}
+      <GiFruitBowl className={styles.h_logo}/>
       <div>
         <ul className={styles.header_links}>
           <Link className={`${styles.header_link} ${styles.link_none}`} to="/">

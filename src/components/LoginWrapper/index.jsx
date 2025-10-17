@@ -33,7 +33,7 @@ const LoginWrapper = (props) => {
 
     if (!hasError) {
       const data = await fetch(
-        "https://fruitstore-1.onrender.com/api/AccountApi/register",
+        "https://fruitstore-mi21.onrender.com/api/AccountApi/register",
         {
           method: "POST",
           headers: {
@@ -59,9 +59,9 @@ const LoginWrapper = (props) => {
 
     if (!hasError) {
       console.log("All inputs are valid", formData);
-      // Do your form submission logic here
+      // Do your form submission logic herem
       const res = await fetch(
-        "https://fruitstore-1.onrender.com/api/AccountApi/login",
+        "https://fruitstore-i21.onrender.com/api/AccountApi/login",
         {
           method: "POST",
           headers: {
@@ -83,7 +83,7 @@ const LoginWrapper = (props) => {
       {isLogin ? (
         <Login
           formData={formData}
-          setFormData={setFormData}
+          setFormData={sethttpsFormData}
           handleSubmit={handleSubmitLogin}
           setIsLogin={setIsLogin}
           errors={errors}

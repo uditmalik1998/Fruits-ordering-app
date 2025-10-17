@@ -10,7 +10,6 @@ const Card = (props) => {
   useEffect(() => {
     const el = descriptionRef.current;
     if (el) {
-      const height = el.clientHeight;
       setIsOverFlowing(el.scrollHeight > el.clientHeight); // el.scrollHeight is all height of p and el.client height is 2 lines height
     }
   }, [details.description]);
@@ -56,7 +55,7 @@ const Card = (props) => {
       <div>
         <img
           className={styles.card_img}
-          src={details?.img}
+          src={`https://fruitstore-1.onrender.com/${details?.imagePath}`}
           alt={details?.name}
         />
       </div>
@@ -79,7 +78,7 @@ const Card = (props) => {
             {expand ? "see less" : "see more"}
           </span>
         )}
-        <p className={styles.price}>$44</p>
+        <p className={styles.price}>{details.price}</p>
         <button className={styles.card_btn} onClick={handleClick}>
           {items?.data?.[index]?.stock === 0
             ? "+1"

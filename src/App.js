@@ -7,9 +7,24 @@ import { Outlet } from "react-router-dom";
 export const DataContext = createContext(null);
 
 function App() {
-  const [data, setData] = useState({ data: jsonData, count: 0 });
+  const [data, setData] = useState({ data: [], count: 0 });
   const [displayData, setDisplayData] = useState([]);
   const [input, setInput] = useState("");
+
+  useEffect(() => {
+    const handelApi = async () => {
+      const res = await fetch("https://fruitstore-mi21.onrender.com/", {
+        method: "Get",
+      });
+      const data = await res.json();
+      if (data?.length > 0) {
+        setData({ data, count: 0 });
+        setDisplayData(data);
+        console.log(data);
+      }
+    };
+    handelApi();
+  }, []);
   useEffect(() => {
     if (input === "") {
       setDisplayData(data?.data);

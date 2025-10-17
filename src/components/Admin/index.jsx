@@ -8,17 +8,16 @@ const Admin = () => {
     description: "",
     price: "",
     stock: "",
-    imagePath: "",
   });
   const [errors, setErrors] = useState({
     name: "",
     description: "",
     price: "",
     stock: "",
-    imagePath: "",
   });
+  const [file, setFile] = useState(null);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setErrors({
       name: "",
@@ -29,9 +28,24 @@ const Admin = () => {
     });
 
     const hasError = handleAdminSubmit(formData, setErrors);
-     console.log(hasError,"***")
     if (!hasError) {
-      console.log(formData);
+        const payload = new FormData();
+        payload.append("name", formData.name);
+        payload.append("description", formData.description);
+        payload.append("price", formData.price);
+        payload.append("stock", formData.stock);
+        payload.append("imagePath", file);
+        console.log(payload);
+
+      const res = await fetch(
+        "https://fruitstore-mi21.onrender.com/api/FruitApi",
+        {
+          method: "Post",
+          body: payload,
+        }
+      );
+      const data = await res.json();
+      console.log(data);
     }
   };
 
@@ -75,7 +89,7 @@ const Admin = () => {
             name="price"
             value={formData.price}
             onChange={(e) =>
-              setFormData({ ...formData, price: e.target.value })
+              setFormData({ ...formData, price: Number(e.target.value) })
             }
           />
         </label>
@@ -91,7 +105,7 @@ const Admin = () => {
             name="stock"
             value={formData.stock}
             onChange={(e) =>
-              setFormData({ ...formData, stock: e.target.value })
+              setFormData({ ...formData, stock: Number(e.target.value) })
             }
           />
         </label>
@@ -104,11 +118,12 @@ const Admin = () => {
             className={styles.form_input}
             type="file"
             accept=".jpg,image/jpeg"
-            name="stock"
+            name="image"
+            onChange={(e) => setFile(e.target?.files[0])}
           />
         </label>
-        {errors?.file && (
-          <span className={styles.err_msg}>{errors.file}</span>
+        {errors?.imagePath && (
+          <span className={styles.err_msg}>{errors.imagePath}</span>
         )}
 
         <button className={styles.form_btn} type="submit">
