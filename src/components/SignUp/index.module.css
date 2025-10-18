@@ -14,6 +14,7 @@
 }
 .form_input {
   padding: 0.5rem 1rem;
+  width: 15rem;
 }
 .form_btn {
   width: -webkit-fill-available;
@@ -35,5 +36,8 @@
 @media only screen and (max-width: 480px) {
   .form_container {
     border: none;
+  }
+  .form_input{
+    width: 13rem;
   }
 }

@@ -77,7 +77,7 @@ const SignUp = (props) => {
       <label htmlFor="admin" className={styles.form_label}>
         Admin:
         <input
-          className={styles.form_input}
+          // className={styles.form_input}
           type="checkbox"
           id="admin"
           name="admin"
