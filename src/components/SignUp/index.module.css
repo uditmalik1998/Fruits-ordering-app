@@ -1,7 +1,7 @@
 .form_container {
   display: flex;
   flex-direction: column;
-  align-items: center;
+  /* align-items: center; */
   border: 1px solid grey;
   border-radius: 1rem;
   padding: 2rem;
@@ -30,4 +30,10 @@
   font-size: 12px;
   min-width: -webkit-fill-available;
   padding-left: 0.5rem;
+}
+
+@media only screen and (max-width: 480px) {
+  .form_container {
+    border: none;
+  }
 }

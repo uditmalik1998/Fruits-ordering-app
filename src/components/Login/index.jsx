@@ -1,4 +1,5 @@
 import React from "react";
+import Loader from "../Loader/index";
 import styles from "./index.module.css";
 
 const Login = (props) => {
@@ -8,6 +9,7 @@ const Login = (props) => {
     handleSubmit = () => {},
     setIsLogin = () => {},
     errors = {},
+    isApiCall = false,
   } = props;
 
   return (
@@ -40,8 +42,11 @@ const Login = (props) => {
       {errors?.password && (
         <span className={styles.err_msg}>{errors.password}</span>
       )}
-      <button className={styles.form_btn} type="submit">
-        Login
+      {errors?.loginAPiError && (
+        <span className={styles.err_msg}>{errors.loginAPiError}</span>
+      )}
+      <button className={styles.form_btn} type="submit" disabled={isApiCall}>
+        {isApiCall ? <Loader /> : "Login"}
       </button>
       <button onClick={() => setIsLogin(false)} className={styles.form_btn}>
         SignUp

@@ -133,7 +133,7 @@ export const handleLoginValidation = (formData, setErrors) => {
   return hasError;
 };
 
-export const handleAdminSubmit = (formData, setErrors) => {
+export const handleAdminSubmit = (formData, setErrors, file) => {
   let hasError = false;
   if (formData.name === "") {
     hasError = true;
@@ -177,6 +177,9 @@ export const handleAdminSubmit = (formData, setErrors) => {
     hasError = true;
     setErrors((prev) => ({ ...prev, stock: "Stock Should not be Negative" }));
   }
-
+  if (file === null) {
+    hasError = true;
+    setErrors((prev) => ({...prev,imgPath: "Please Provide JPEG image" }));
+  }
   return hasError;
 };

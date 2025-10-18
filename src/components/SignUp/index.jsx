@@ -1,5 +1,6 @@
 import React from "react";
 import styles from "./index.module.css";
+import Loader from "../Loader";
 
 const SignUp = (props) => {
   const {
@@ -8,6 +9,7 @@ const SignUp = (props) => {
     handleSubmit = () => {},
     setIsLogin = () => {},
     errors = {},
+    isApiCall = false,
   } = props;
 
   return (
@@ -72,8 +74,24 @@ const SignUp = (props) => {
       {errors?.password && (
         <span className={styles.err_msg}>{errors.password}</span>
       )}
-      <button className={styles.form_btn} type="submit">
-        SignUp
+      <label htmlFor="admin" className={styles.form_label}>
+        Admin:
+        <input
+          className={styles.form_input}
+          type="checkbox"
+          id="admin"
+          name="admin"
+          value={formData.isAdmin}
+          onChange={(e) =>
+            setFormData({ ...formData, isAdmin: e.target.checked })
+          }
+        />
+      </label>
+      {errors?.apiError && (
+        <span className={styles.err_msg}>{errors.apiError}</span>
+      )}
+      <button className={styles.form_btn} type="submit" disabled={isApiCall}>
+        {isApiCall ? <Loader /> : "SignUp"}
       </button>
       <button onClick={() => setIsLogin(true)} className={styles.form_btn}>
         Login

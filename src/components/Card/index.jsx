@@ -24,7 +24,7 @@ const Card = (props) => {
       const updatedItems = prevItems.data.map((item) => {
         if (item.id === details?.id) {
           found = true;
-          return { ...item, stock: item.stock + 1 };
+          return { ...item, itemAdded: item.itemAdded + 1 };
         }
         return item;
       });
@@ -32,17 +32,17 @@ const Card = (props) => {
       // If item was found, return updated array; otherwise, add new item
       return found
         ? { data: updatedItems, count: items.count + 1 }
-        : [...prevItems];
+        : { ...prevItems };
     });
   };
 
   const handleDecrement = () => {
-    if (items?.data?.[index].stock > 0) {
+    if (items?.data?.[index].itemAdded > 0) {
       const updatedData =
         items?.data?.length > 0 &&
         items.data.map((item) => {
           if (item?.id === details?.id) {
-            return { ...item, stock: item.stock - 1 };
+            return { ...item, itemAdded: item.itemAdded - 1 };
           }
           return item;
         });
@@ -55,7 +55,7 @@ const Card = (props) => {
       <div>
         <img
           className={styles.card_img}
-          src={`https://fruitstore-1.onrender.com/${details?.imagePath}`}
+          src={`${details?.imageUrl}`}
           alt={details?.name}
         />
       </div>
@@ -80,9 +80,9 @@ const Card = (props) => {
         )}
         <p className={styles.price}>{details.price}</p>
         <button className={styles.card_btn} onClick={handleClick}>
-          {items?.data?.[index]?.stock === 0
+          {items?.data?.[index]?.itemAdded === 0
             ? "+1"
-            : `${items?.data?.[index]?.stock}`}
+            : `${items?.data?.[index]?.itemAdded}`}
         </button>
         <button
           className={`${styles.card_btn} ${styles.card_btn_p}`}

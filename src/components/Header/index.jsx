@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import { IoSearch } from "react-icons/io5";
 import { MdLogin } from "react-icons/md";
 import { FaCartShopping } from "react-icons/fa6";
 import { Link } from "react-router-dom";
@@ -9,7 +8,7 @@ import styles from "./index.module.css";
 const Header = (props) => {
   const [cartCount, setCartCount] = useState(0);
   const [shake, setShake] = useState(false);
-  const { data, setInput = () => {}, input = "" } = props;
+  const { data } = props;
 
   useEffect(() => {
     if (data.count !== cartCount) {
@@ -26,20 +25,10 @@ const Header = (props) => {
 
   return (
     <header className={styles.header_container}>
-      {/* <div className={styles.input_container}>
-        <input
-          className={styles.header_input}
-          placeholder="search something"
-          type="text"
-          name="fruits search"
-          value={input}
-          onChange={(e) => setInput(e.target.value)}
-        />
-        <span className={styles.icon_conatiner}>
-          <IoSearch className={styles.search_icon} />
-        </span>
-      </div> */}
-      <GiFruitBowl className={styles.h_logo}/>
+      <div className={styles.name_wrapper}>
+        <GiFruitBowl className={styles.h_logo} />
+        <span>DryDelight</span>
+      </div>
       <div>
         <ul className={styles.header_links}>
           <Link className={`${styles.header_link} ${styles.link_none}`} to="/">

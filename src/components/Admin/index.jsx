@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import styles from "./index.module.css";
 import { handleAdminSubmit } from "../../utils/helper";
+import Loader from "../Loader";
 
 const Admin = () => {
   const [formData, setFormData] = useState({
@@ -14,9 +15,11 @@ const Admin = () => {
     description: "",
     price: "",
     stock: "",
+    apiError: "",
+    imgPath: "",
   });
   const [file, setFile] = useState(null);
-
+  const [isFetch, setIsFetch] = useState(false);
   const handleSubmit = async (e) => {
     e.preventDefault();
     setErrors({
@@ -27,25 +30,44 @@ const Admin = () => {
       imagePath: "",
     });
 
-    const hasError = handleAdminSubmit(formData, setErrors);
+    const hasError = handleAdminSubmit(formData, setErrors, file);
     if (!hasError) {
-        const payload = new FormData();
-        payload.append("name", formData.name);
-        payload.append("description", formData.description);
-        payload.append("price", formData.price);
-        payload.append("stock", formData.stock);
-        payload.append("imagePath", file);
-        console.log(payload);
+      const payload = new FormData();
+      payload.append("name", formData.name);
+      payload.append("description", formData.description);
+      payload.append("price", formData.price);
+      payload.append("stock", formData.stock);
+      payload.append("imagePath", file);
+      console.log(payload);
 
-      const res = await fetch(
-        "https://fruitstore-mi21.onrender.com/api/FruitApi",
-        {
-          method: "Post",
-          body: payload,
+      try {
+        setIsFetch(true);
+        const res = await fetch(
+          "https://fruitstore-mi21.onrender.com/api/FruitApi",
+          {
+            method: "Post",
+            body: payload,
+          }
+        );
+  
+        if (!res.ok) {
+          const errormsg = await res.json();
+          setIsFetch(false);
+          return setErrors((prev) => ({
+            ...prev,
+            apiError: errormsg.message || `Error ${res.status}`,
+          }));
         }
-      );
-      const data = await res.json();
-      console.log(data);
+        const data = await res.json();
+        console.log(data);
+        setIsFetch(false);
+      } catch (err) {
+        console.log(err, "***Error");
+        setErrors((prev) => ({
+          ...prev,
+          apiError: err.message || "Something went wrong, Try again later.",
+        }));
+      }
     }
   };
 
@@ -122,12 +144,12 @@ const Admin = () => {
             onChange={(e) => setFile(e.target?.files[0])}
           />
         </label>
-        {errors?.imagePath && (
-          <span className={styles.err_msg}>{errors.imagePath}</span>
+        {errors?.imgPath && (
+          <span className={styles.err_msg}>{errors.imgPath}</span>
         )}
 
-        <button className={styles.form_btn} type="submit">
-          Upload
+        <button className={styles.form_btn} type="submit" disabled={isFetch ? true :false}>
+          {isFetch ? <Loader/>: "Upload"}
         </button>
       </form>
     </div>

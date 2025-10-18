@@ -14,14 +14,18 @@ const LoginWrapper = (props) => {
     lastname: "",
     email: "",
     password: "",
+    isAdmin: false,
   });
   const [errors, setErrors] = useState({
     firstname: "",
     lastname: "",
     email: "",
     password: "",
+    apiError: "",
+    loginAPiError: "",
   });
   const [isLogin, setIsLogin] = useState(false);
+  const [isApiCall, setIsApiCall] = useState(false);
   const navigate = useNavigate();
 
   const handleSubmitSignUp = async (e) => {
@@ -32,19 +36,38 @@ const LoginWrapper = (props) => {
     const hasError = handleSignUPValidation(formData, setErrors);
 
     if (!hasError) {
-      const data = await fetch(
-        "https://fruitstore-mi21.onrender.com/api/AccountApi/register",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json", // 👈 tells server we’re sending JSON
-          },
-          body: JSON.stringify(formData),
+      try {
+        setIsApiCall(true);
+        const data = await fetch(
+          "https://fruitstore-mi21.onrender.com/api/AccountApi/register",
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json", // 👈 tells server we’re sending JSON
+            },
+            body: JSON.stringify(formData),
+          }
+        );
+        if (!data.ok) {
+          const errorData = await data.json();
+          setIsApiCall(false);
+          return setErrors((prevState) => ({
+            ...prevState,
+            apiError: errorData.message || `Error ${data.status}`,
+          }));
         }
-      );
-      const res = await data.json();
-      if (res.message === "Registered!") {
-        navigate("/");
+        const res = await data.json();
+        if (res.message === "Registered!") {
+          setIsApiCall(false);
+          navigate("/");
+        }
+      } catch (err) {
+        setIsApiCall(false);
+        setErrors((prevState) => ({
+          ...prevState,
+          apiError:
+            err.message || "Something went wrong. Please try again later.",
+        }));
       }
     }
   };
@@ -58,22 +81,39 @@ const LoginWrapper = (props) => {
     const hasError = handleLoginValidation(formData, setErrors);
 
     if (!hasError) {
-      console.log("All inputs are valid", formData);
-      // Do your form submission logic herem
-      const res = await fetch(
-        "https://fruitstore-i21.onrender.com/api/AccountApi/login",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(formData),
+      try {
+        setIsApiCall(true);
+        const res = await fetch(
+          "https://fruitstore-mi21.onrender.com/api/AccountApi/login",
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(formData),
+          }
+        );
+        if (!res.ok) {
+          const errorMsg = await res.json();
+          setIsApiCall(false);
+          return setErrors((prevState) => ({
+            ...prevState,
+            loginAPiError: errorMsg.message || `Error ${res.status}`,
+          }));
         }
-      );
-      const data = await res.json();
-      if (data?.message === "Logged in!") {
-        navigate("/");
-        console.log(data, "****");
+        const data = await res.json();
+        if (data?.message === "Logged in!") {
+          setIsApiCall(false);
+          navigate("/");
+        }
+      } catch (err) {
+        console.log(err, "***Error");
+        setErrors((prevState) => ({
+          ...prevState,
+          loginAPiError:
+            err.message || "Something went wrong. Please try again later.",
+        }));
+        setIsApiCall(false);
       }
     }
   };
@@ -87,6 +127,7 @@ const LoginWrapper = (props) => {
           handleSubmit={handleSubmitLogin}
           setIsLogin={setIsLogin}
           errors={errors}
+          isApiCall={isApiCall}
         />
       ) : (
         <SignUp
@@ -95,6 +136,7 @@ const LoginWrapper = (props) => {
           handleSubmit={handleSubmitSignUp}
           setIsLogin={setIsLogin}
           errors={errors}
+          isApiCall={isApiCall}
         />
       )}
     </div>
