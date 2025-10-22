@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { MdLogin } from "react-icons/md";
 import { FaCartShopping } from "react-icons/fa6";
+import { FaUser } from "react-icons/fa";
 import { Link } from "react-router-dom";
 import { GiFruitBowl } from "react-icons/gi";
 import styles from "./index.module.css";
@@ -8,7 +9,17 @@ import styles from "./index.module.css";
 const Header = (props) => {
   const [cartCount, setCartCount] = useState(0);
   const [shake, setShake] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState({});
   const { data } = props;
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (token) {
+      setIsLoggedIn(true);
+    } else {
+      setIsLoggedIn(false);
+    }
+  }, []);
 
   useEffect(() => {
     if (data.count !== cartCount) {
@@ -53,11 +64,19 @@ const Header = (props) => {
             <FaCartShopping className={`${styles.cart_icon}`} />
             <span className={`${styles.cart_badge}`}>{cartCount}</span>
           </li>
-          <Link className={styles.header_link} to="/login">
-            <li className={`${styles.login_container}`}>
-              <MdLogin className={`${styles.login_icon} ${styles.link}`} />
-            </li>
-          </Link>
+          {isLoggedIn ? (
+            <Link className={styles.profile_link} to="/profile">
+              <li>
+                <FaUser className={`${styles.profile_icon} ${styles.link}`} />
+              </li>
+            </Link>
+          ) : (
+            <Link className={styles.header_link} to="/login">
+              <li className={`${styles.login_container}`}>
+                <MdLogin className={`${styles.login_icon} ${styles.link}`} />
+              </li>
+            </Link>
+          )}
         </ul>
       </div>
     </header>

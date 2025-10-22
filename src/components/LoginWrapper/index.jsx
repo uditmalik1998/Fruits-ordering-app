@@ -14,7 +14,7 @@ const LoginWrapper = (props) => {
     lastname: "",
     email: "",
     password: "",
-    isAdmin: false,
+    isadmin: false,
   });
   const [errors, setErrors] = useState({
     firstname: "",
@@ -38,30 +38,29 @@ const LoginWrapper = (props) => {
     if (!hasError) {
       try {
         setIsApiCall(true);
-        const data = await fetch(
-          "https://fruitstore-mi21.onrender.com/api/AccountApi/register",
-          {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json", // 👈 tells server we’re sending JSON
-            },
-            body: JSON.stringify(formData),
-          }
-        );
+        const data = await fetch("http://localhost:3001/api/v1/auth/register", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json", 
+          },
+          body: JSON.stringify(formData),
+        });
         if (!data.ok) {
           const errorData = await data.json();
           setIsApiCall(false);
           return setErrors((prevState) => ({
             ...prevState,
-            apiError: errorData.message || `Error ${data.status}`,
+            apiError: errorData.errormsg || `Error ${data.status}`,
           }));
         }
         const res = await data.json();
-        if (res.message === "Registered!") {
+        if (res.token) {
+          localStorage.setItem("token", res.token);
           setIsApiCall(false);
           navigate("/");
         }
       } catch (err) {
+        console.log(err);
         setIsApiCall(false);
         setErrors((prevState) => ({
           ...prevState,
@@ -75,7 +74,6 @@ const LoginWrapper = (props) => {
   const handleSubmitLogin = async (e) => {
     e.preventDefault();
 
-    // Reset all errors first
     setErrors({ firstname: "", lastname: "", email: "", password: "" });
 
     const hasError = handleLoginValidation(formData, setErrors);
@@ -83,26 +81,26 @@ const LoginWrapper = (props) => {
     if (!hasError) {
       try {
         setIsApiCall(true);
-        const res = await fetch(
-          "https://fruitstore-mi21.onrender.com/api/AccountApi/login",
-          {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify(formData),
-          }
-        );
+        const res = await fetch("http://localhost:3001/api/v1/auth/login", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(formData),
+        });
+        
         if (!res.ok) {
-          const errorMsg = await res.json();
+          const error = await res.json();
           setIsApiCall(false);
+          console.log(error);
           return setErrors((prevState) => ({
             ...prevState,
-            loginAPiError: errorMsg.message || `Error ${res.status}`,
+            loginAPiError: error.errormsg || `Error ${res.status}`,
           }));
         }
         const data = await res.json();
-        if (data?.message === "Logged in!") {
+        if (data?.token) {
+          localStorage.setItem("token", data.token);
           setIsApiCall(false);
           navigate("/");
         }

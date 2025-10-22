@@ -37,7 +37,7 @@ const Admin = () => {
       payload.append("description", formData.description);
       payload.append("price", formData.price);
       payload.append("stock", formData.stock);
-      payload.append("imagePath", file);
+      payload.append("image", file);
       console.log(payload);
 
       try {
@@ -49,7 +49,7 @@ const Admin = () => {
             body: payload,
           }
         );
-  
+
         if (!res.ok) {
           const errormsg = await res.json();
           setIsFetch(false);
@@ -148,8 +148,8 @@ const Admin = () => {
           <span className={styles.err_msg}>{errors.imgPath}</span>
         )}
 
-        <button className={styles.form_btn} type="submit" disabled={isFetch ? true :false}>
-          {isFetch ? <Loader/>: "Upload"}
+        <button className={styles.form_btn} type="submit" disabled={isFetch}>
+          {isFetch ? <Loader /> : "Upload"}
         </button>
       </form>
     </div>

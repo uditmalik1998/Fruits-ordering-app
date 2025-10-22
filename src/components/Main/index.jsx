@@ -40,12 +40,12 @@ const Main = (props) => {
         }
         const data = await res.json();
         if (data?.length > 0) {
-          console.log(data, "***");
           const updatedData =
             data?.length > 0 &&
             data.map((item) => {
               return { ...item, itemAdded: 0 };
             });
+
           setData({ data: updatedData, count: 0 });
           setDisplayData(updatedData);
           console.log(data);

@@ -81,9 +81,9 @@ const SignUp = (props) => {
           type="checkbox"
           id="admin"
           name="admin"
-          value={formData.isAdmin}
+          value={formData.isadmin}
           onChange={(e) =>
-            setFormData({ ...formData, isAdmin: e.target.checked })
+            setFormData({ ...formData, isadmin: e.target.checked })
           }
         />
       </label>
