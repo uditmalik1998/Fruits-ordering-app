@@ -1,7 +1,6 @@
 .header_container {
-  display: grid;
-  grid-template-columns: 4fr 1fr;
-  grid-template-rows: 1fr;
+  display: flex;
+  justify-content: space-between;
   align-items: center;
   background-color: #e3dede;
   /* color: white; */
@@ -23,8 +22,7 @@
   width: 1.5rem;
   height: 1.5rem;
   position: absolute;
-  top: -1.6rem;
-  right: -11rem;
+  right: 1rem;
 }
 .profile_icon {
   width: 1.4rem;
@@ -81,6 +79,12 @@
   padding: 0 1rem;
   color: grey;
 }
+.logout_icon {
+  width: 1.25rem;
+  height: 1.25rem;
+  padding-left: 0.5rem;
+  color: grey;
+}
 
 /* Keyframes for shake */
 @keyframes shakeCart {
@@ -118,5 +122,8 @@
   }
   .profile_link {
     padding: 0;
+  }
+  .header_link {
+    padding-left: 0;
   }
 }

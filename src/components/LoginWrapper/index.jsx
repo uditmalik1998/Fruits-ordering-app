@@ -37,13 +37,20 @@ const LoginWrapper = (props) => {
 
     if (!hasError) {
       try {
+        const updatedFormData = {
+          email: formData.email,
+          firstname: formData.firstname,
+          lastname: formData.lastname,
+          password: formData.password,
+          isadmin: formData.isadmin,
+        };
         setIsApiCall(true);
         const data = await fetch("http://localhost:3001/api/v1/auth/register", {
           method: "POST",
           headers: {
-            "Content-Type": "application/json", 
+            "Content-Type": "application/json",
           },
-          body: JSON.stringify(formData),
+          body: JSON.stringify(updatedFormData),
         });
         if (!data.ok) {
           const errorData = await data.json();
@@ -54,8 +61,8 @@ const LoginWrapper = (props) => {
           }));
         }
         const res = await data.json();
-        if (res.token) {
-          localStorage.setItem("token", res.token);
+        if (res?.data?.token) {
+          localStorage.setItem("token", res.data.token);
           setIsApiCall(false);
           navigate("/");
         }
@@ -74,13 +81,14 @@ const LoginWrapper = (props) => {
   const handleSubmitLogin = async (e) => {
     e.preventDefault();
 
-    setErrors({ firstname: "", lastname: "", email: "", password: "" });
+    setErrors({ email: "", password: "" });
 
     const hasError = handleLoginValidation(formData, setErrors);
 
     if (!hasError) {
       try {
         setIsApiCall(true);
+
         const res = await fetch("http://localhost:3001/api/v1/auth/login", {
           method: "POST",
           headers: {
@@ -88,7 +96,7 @@ const LoginWrapper = (props) => {
           },
           body: JSON.stringify(formData),
         });
-        
+
         if (!res.ok) {
           const error = await res.json();
           setIsApiCall(false);
@@ -99,8 +107,8 @@ const LoginWrapper = (props) => {
           }));
         }
         const data = await res.json();
-        if (data?.token) {
-          localStorage.setItem("token", data.token);
+        if (data?.data?.token) {
+          localStorage.setItem("token", data.data.token);
           setIsApiCall(false);
           navigate("/");
         }

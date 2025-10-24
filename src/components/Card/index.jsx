@@ -1,10 +1,13 @@
-import React, { useRef, useState, useEffect } from "react";
+import React, { useRef, useState, useEffect, use } from "react";
 import styles from "./index.module.css";
+import { CartContext } from "../../App";
 
 const Card = (props) => {
   const [expand, setExpand] = useState(false);
   const [isOverFlowing, setIsOverFlowing] = useState(false);
   const descriptionRef = useRef(null);
+
+  const { setCartData, cartData } = use(CartContext);
   const { items = {}, setItems = () => {}, details = {}, index = 0 } = props;
 
   useEffect(() => {
@@ -22,7 +25,7 @@ const Card = (props) => {
     setItems((prevItems) => {
       let found = false;
       const updatedItems = prevItems.data.map((item) => {
-        if (item.id === details?.id) {
+        if (item._id === details._id) {
           found = true;
           return { ...item, itemAdded: item.itemAdded + 1 };
         }
@@ -34,6 +37,21 @@ const Card = (props) => {
         ? { data: updatedItems, count: items.count + 1 }
         : { ...prevItems };
     });
+
+   setCartData((prev) => {
+     const existingItem = prev.find((item) => item._id === details._id);
+
+     if (existingItem) {
+       return prev.map((item) =>
+         item._id === details._id
+           ? { ...item, itemAdded: item.itemAdded + 1 }
+           : item
+       );
+     }
+
+     return [...prev, { ...details, itemAdded: 1 }];
+   });
+   
   };
 
   const handleDecrement = () => {
@@ -55,13 +73,13 @@ const Card = (props) => {
       <div>
         <img
           className={styles.card_img}
-          src={`${details?.imageUrl}`}
-          alt={details?.name}
+          src={`${details?.img_url}`}
+          alt={details?.item_name}
         />
       </div>
       <div>
         <p className={styles.card_name}>
-          <strong>{details?.name}</strong>
+          <strong>{details?.item_name}</strong>
         </p>
         <p
           ref={descriptionRef}

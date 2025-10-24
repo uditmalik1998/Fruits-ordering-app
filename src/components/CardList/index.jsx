@@ -10,7 +10,7 @@ const CardList = (props) => {
     <div className={styles.cardlist_container}>
       {displayData?.length > 0 &&
         displayData.map((item,index) => (
-          <Card key={item?.id} details={item} setItems={setData} items={data} index={index}/>
+          <Card key={item?._id} details={item} setItems={setData} items={data} index={index}/>
         ))}
     </div>
   );

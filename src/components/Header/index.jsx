@@ -4,13 +4,16 @@ import { FaCartShopping } from "react-icons/fa6";
 import { FaUser } from "react-icons/fa";
 import { Link } from "react-router-dom";
 import { GiFruitBowl } from "react-icons/gi";
+import SignoutPopup from "../SignoutPop/index";
 import styles from "./index.module.css";
+import { PiSignOutBold } from "react-icons/pi";
 
 const Header = (props) => {
   const [cartCount, setCartCount] = useState(0);
   const [shake, setShake] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState({});
-  const { data } = props;
+  const [showPopup, setShowPopup] = useState(false);
+  const { data, setIsCartPopup } = props;
 
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -34,52 +37,84 @@ const Header = (props) => {
     setShake(false);
   };
 
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    window.location.reload();
+    setShowPopup(false);
+  };
+
   return (
-    <header className={styles.header_container}>
-      <div className={styles.name_wrapper}>
-        <GiFruitBowl className={styles.h_logo} />
-        <span>DryDelight</span>
-      </div>
-      <div>
-        <ul className={styles.header_links}>
-          <Link className={`${styles.header_link} ${styles.link_none}`} to="/">
-            <li>
-              <strong className={`${styles.link}`}>Home</strong>
-            </li>
-          </Link>
-          <Link
-            className={`${styles.header_link} ${styles.link_none}`}
-            to="/admin"
-          >
-            <li>
-              <strong className={`${styles.link} ${styles.link_none}`}>
-                Admin
-              </strong>
-            </li>
-          </Link>
-          <li
-            className={`${styles.login_container} ${shake ? styles.shake : ""}`}
-            onAnimationEnd={handleAnimation}
-          >
-            <FaCartShopping className={`${styles.cart_icon}`} />
-            <span className={`${styles.cart_badge}`}>{cartCount}</span>
-          </li>
-          {isLoggedIn ? (
-            <Link className={styles.profile_link} to="/profile">
+    <>
+      <header className={styles.header_container}>
+        <div className={styles.name_wrapper}>
+          <GiFruitBowl className={styles.h_logo} />
+          <span>DryDelight</span>
+        </div>
+        <div>
+          <ul className={styles.header_links}>
+            <Link
+              className={`${styles.header_link} ${styles.link_none}`}
+              to="/"
+            >
               <li>
-                <FaUser className={`${styles.profile_icon} ${styles.link}`} />
+                <strong className={`${styles.link}`}>Home</strong>
               </li>
             </Link>
-          ) : (
-            <Link className={styles.header_link} to="/login">
-              <li className={`${styles.login_container}`}>
-                <MdLogin className={`${styles.login_icon} ${styles.link}`} />
+            <Link
+              className={`${styles.header_link} ${styles.link_none}`}
+              to="/admin"
+            >
+              <li>
+                <strong className={`${styles.link} ${styles.link_none}`}>
+                  Admin
+                </strong>
               </li>
             </Link>
-          )}
-        </ul>
-      </div>
-    </header>
+            <li
+              className={`${styles.login_container} ${
+                shake ? styles.shake : ""
+              }`}
+              onAnimationEnd={handleAnimation}
+              onClick={() => setIsCartPopup(true)}
+            >
+              <FaCartShopping className={`${styles.cart_icon}`} />
+              <span className={`${styles.cart_badge}`}>{cartCount}</span>
+            </li>
+            {isLoggedIn ? (
+              <>
+                <li
+                  onClick={() => {
+                    setShowPopup(true);
+                  }}
+                >
+                  <PiSignOutBold className={styles.logout_icon} />
+                </li>
+                <Link className={styles.profile_link} to="/profile">
+                  <li>
+                    <FaUser
+                      className={`${styles.profile_icon} ${styles.link}`}
+                    />
+                  </li>
+                </Link>
+              </>
+            ) : (
+              <Link className={styles.header_link} to="/login">
+                <li className={`${styles.login_container}`}>
+                  <MdLogin className={`${styles.login_icon} ${styles.link}`} />
+                </li>
+              </Link>
+            )}
+          </ul>
+        </div>
+      </header>
+      {showPopup && (
+        <SignoutPopup
+          isOpen={showPopup}
+          onClose={() => setShowPopup(false)}
+          onSignout={handleLogout}
+        />
+      )}
+    </>
   );
 };
 

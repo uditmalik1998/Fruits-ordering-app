@@ -33,7 +33,7 @@ const Admin = () => {
     const hasError = handleAdminSubmit(formData, setErrors, file);
     if (!hasError) {
       const payload = new FormData();
-      payload.append("name", formData.name);
+      payload.append("item_name", formData.name);
       payload.append("description", formData.description);
       payload.append("price", formData.price);
       payload.append("stock", formData.stock);
@@ -42,10 +42,14 @@ const Admin = () => {
 
       try {
         setIsFetch(true);
+        const token = localStorage.getItem("token");
         const res = await fetch(
-          "https://fruitstore-mi21.onrender.com/api/FruitApi",
+          "http://localhost:3001/api/v1/admin/uploaditems",
           {
             method: "Post",
+            headers:{
+            "authorization":`Bearer ${token}`
+            },
             body: payload,
           }
         );
@@ -55,7 +59,7 @@ const Admin = () => {
           setIsFetch(false);
           return setErrors((prev) => ({
             ...prev,
-            apiError: errormsg.message || `Error ${res.status}`,
+            apiError: errormsg.errormsg || `Error ${res.status}`,
           }));
         }
         const data = await res.json();
@@ -63,6 +67,7 @@ const Admin = () => {
         setIsFetch(false);
       } catch (err) {
         console.log(err, "***Error");
+        setIsFetch(false);
         setErrors((prev) => ({
           ...prev,
           apiError: err.message || "Something went wrong, Try again later.",

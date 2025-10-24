@@ -27,9 +27,9 @@
   text-decoration: underline;
 }
 .card_conatiner {
-  display: grid;
+  /* display: grid;
   grid-template-columns: 1fr;
-  justify-self: center;
+  justify-self: center; */
   width: 13rem;
   padding: 1rem;
   color: #898585;
