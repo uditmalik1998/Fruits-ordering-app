@@ -1,12 +1,13 @@
 import React, { useRef, useState, useEffect, use } from "react";
 import styles from "./index.module.css";
 import { CartContext } from "../../App";
+import Loader from "../Loader";
 
 const Card = (props) => {
   const [expand, setExpand] = useState(false);
   const [isOverFlowing, setIsOverFlowing] = useState(false);
   const descriptionRef = useRef(null);
-
+  const [isApiLoading, setIsApiLoading] = useState(false);
   const { setCartData, cartData } = use(CartContext);
   const { items = {}, setItems = () => {}, details = {}, index = 0 } = props;
 
@@ -21,13 +22,14 @@ const Card = (props) => {
     setExpand(!expand);
   };
 
-  const handleClick = () => {
+  const handleClick = async () => {
+    setIsApiLoading(true);
     setItems((prevItems) => {
       let found = false;
       const updatedItems = prevItems.data.map((item) => {
         if (item._id === details._id) {
           found = true;
-          return { ...item, itemAdded: item.itemAdded + 1 };
+          return { ...item, quantity: item.quantity + 1 };
         }
         return item;
       });
@@ -38,29 +40,52 @@ const Card = (props) => {
         : { ...prevItems };
     });
 
-   setCartData((prev) => {
-     const existingItem = prev.find((item) => item._id === details._id);
+    // setCartData((prev) => {
+    //   const existingItem = prev.find((item) => item._id === details._id);
+    //   if (existingItem) {
+    //     return prev.map((item) =>
+    //       item._id === details._id
+    //         ? { ...item, quantity: item.quantity + 1 }
+    //         : item
+    //     );
+    //   }
+    //   return [...prev, { ...details, quantity: 1 }];
+    // });
 
-     if (existingItem) {
-       return prev.map((item) =>
-         item._id === details._id
-           ? { ...item, itemAdded: item.itemAdded + 1 }
-           : item
-       );
-     }
+    try {
+      const token = localStorage.getItem("token");
+      const payload = {
+        item_name: details.item_name,
+        price: details.price,
+        img_url: details.img_url,
+        quantity: 1,
+        _id: details._id,
+      };
 
-     return [...prev, { ...details, itemAdded: 1 }];
-   });
-   
+      const data = await fetch("http://localhost:3001/api/v1/cart", {
+        method: "POST",
+        headers: {
+          "content-type": "application/json",
+          authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(payload),
+      });
+      const json = await data.json();
+      setCartData(json.data);
+      setIsApiLoading(false);
+    } catch (err) {
+      console.log(err, "Error");
+      setIsApiLoading(false);
+    }
   };
 
   const handleDecrement = () => {
-    if (items?.data?.[index].itemAdded > 0) {
+    if (items?.data?.[index].quantity > 0) {
       const updatedData =
         items?.data?.length > 0 &&
         items.data.map((item) => {
-          if (item?.id === details?.id) {
-            return { ...item, itemAdded: item.itemAdded - 1 };
+          if (item?._id === details?._id) {
+            return { ...item, quantity: item.quantity - 1 };
           }
           return item;
         });
@@ -98,15 +123,13 @@ const Card = (props) => {
         )}
         <p className={styles.price}>{details.price}</p>
         <button className={styles.card_btn} onClick={handleClick}>
-          {items?.data?.[index]?.itemAdded === 0
-            ? "+1"
-            : `${items?.data?.[index]?.itemAdded}`}
+          {isApiLoading ? <Loader /> : "+1"}
         </button>
         <button
           className={`${styles.card_btn} ${styles.card_btn_p}`}
           onClick={handleDecrement}
         >
-          {details.stock >= 0 ? "-1" : `${details.stock}`}
+          -1
         </button>
       </div>
     </div>

@@ -79,6 +79,7 @@ const Admin = () => {
   return (
     <div className={styles.admin_container}>
       <form className={styles.form_container} onSubmit={handleSubmit}>
+        <h2 className={styles.heading}>Add New Product</h2>
         <label htmlFor="name" className={styles.form_label}>
           Item Name:
           <input

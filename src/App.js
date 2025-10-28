@@ -22,20 +22,46 @@ function App() {
     }
   }, [location.pathname]);
 
+  useEffect(() => {
+    const fetchCart = async () => {
+      try {
+        const token = localStorage.getItem("token");
+        const data = await fetch(
+          "http://localhost:3001/api/v1/cart/getcartdetails",
+          {
+            method: "get",
+            headers: {
+              authorization: `Bearer ${token}`,
+            },
+          }
+        );
+
+        const json = await data.json();
+        setCartData(json.data);
+      } catch (err) {
+        console.log(err);
+      }
+    };
+    fetchCart();
+  }, []);
+
   const handleClose = () => {
     setIsCartPopup(false);
   };
+  
   return (
     <div className="App">
       <DataContext value={{ setData, data }}>
         <CartContext value={{ setCartData, cartData }}>
-          {show.header && <Header data={data} setIsCartPopup={setIsCartPopup}/>}
+          {show.header && (
+            <Header cartData={cartData} setIsCartPopup={setIsCartPopup} />
+          )}
           <Outlet />
           {isCartPopup && (
             <CartPopup
               isOpen={isCartPopup}
               onClose={handleClose}
-              items={cartData}
+              items={cartData.cart}
               onPlaceOrder={() => console.log(cartData)}
             />
           )}

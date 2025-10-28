@@ -1,8 +1,8 @@
-import React, { useContext, useState, useEffect, use } from "react";
+import React, { useContext, useState, useEffect } from "react";
 import CardList from "../CardList";
 import styles from "./index.module.css";
 import { DataContext } from "../../App";
-import jsonData from "../CardList/cardlist.json";
+// import jsonData from "../CardList/cardlist.json";
 import HomeShimmer from "../HomeShimmer";
 // import { IoSearch } from "react-icons/io5";
 
@@ -17,10 +17,11 @@ const Main = (props) => {
     if (input === "") {
       setDisplayData(data?.data);
     }
+    
     const res =
       data?.data?.length &&
       data?.data?.filter((item) =>
-        item?.name?.toLowerCase()?.includes(input?.toLowerCase())
+        item?.item_name?.toLowerCase()?.includes(input?.toLowerCase())
       );
     setDisplayData(res);
   }, [input]);
@@ -51,7 +52,7 @@ const Main = (props) => {
           const updatedData =
             data.data.length > 0 &&
             data.data.map((item) => {
-              return { ...item, itemAdded: 0 };
+              return { ...item, quantity: 0 };
             });
 
           setData({ data: updatedData, count: 0 });
@@ -65,7 +66,7 @@ const Main = (props) => {
     };
     handelApi();
   }, []);
-  
+
   return (
     <>
       {isLoading ? (

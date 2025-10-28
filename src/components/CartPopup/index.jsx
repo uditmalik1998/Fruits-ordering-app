@@ -1,11 +1,11 @@
-import React, {use} from "react";
+import React from "react";
 import "./index.css";
 
 const CartPopup = ({ isOpen, onClose, items, onPlaceOrder }) => {
   if (!isOpen) return null;
 
   const subtotal = items.reduce(
-    (sum, item) => sum + item.price * item.itemAdded,
+    (sum, item) => sum + item.price * item.quantity,
     0
   );
   const tax = subtotal * 0.1;
@@ -46,10 +46,10 @@ const CartPopup = ({ isOpen, onClose, items, onPlaceOrder }) => {
                     <p className="cart-item-price">${item.price.toFixed(2)}</p>
                     <div className="cart-item-footer">
                       <span className="cart-item-qty">
-                        Qty: {item.itemAdded}
+                        Qty: {item.quantity}
                       </span>
                       <span className="cart-item-total">
-                        ₹{(item.price * item.itemAdded).toFixed(2)}
+                        ₹{(item.price * item.quantity).toFixed(2)}
                       </span>
                     </div>
                   </div>

@@ -13,7 +13,7 @@ const Header = (props) => {
   const [shake, setShake] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState({});
   const [showPopup, setShowPopup] = useState(false);
-  const { data, setIsCartPopup } = props;
+  const { cartData = {}, setIsCartPopup } = props;
 
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -25,13 +25,11 @@ const Header = (props) => {
   }, []);
 
   useEffect(() => {
-    if (data.count !== cartCount) {
-      setCartCount(data.count);
+    setCartCount(cartData.totalQuantity);
 
-      // Trigger shake
-      setShake(true);
-    }
-  }, [data.count]);
+    // Trigger shake
+    setShake(true);
+  }, [cartData.totalQuantity]);
 
   const handleAnimation = () => {
     setShake(false);
@@ -83,6 +81,7 @@ const Header = (props) => {
             {isLoggedIn ? (
               <>
                 <li
+                  className={styles.logout_icon_wrapper}
                   onClick={() => {
                     setShowPopup(true);
                   }}
@@ -90,11 +89,7 @@ const Header = (props) => {
                   <PiSignOutBold className={styles.logout_icon} />
                 </li>
                 <Link className={styles.profile_link} to="/profile">
-                  <li>
-                    <FaUser
-                      className={`${styles.profile_icon} ${styles.link}`}
-                    />
-                  </li>
+                  <FaUser className={`${styles.profile_icon} ${styles.link}`} />
                 </Link>
               </>
             ) : (

@@ -11,7 +11,7 @@
 }
 .description {
   font-size: 0.8rem;
-  padding: 0.25rem;
+  padding: 0 0.25rem;
   margin: 0;
   /* Truncate text to 2 lines */
   display: -webkit-box;

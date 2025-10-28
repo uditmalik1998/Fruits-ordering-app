@@ -4,7 +4,7 @@ import styles from "./index.module.css";
 import jsonData from "./cardlist.json";
 
 const CardList = (props) => {
-  const [items, setItems] = useState(jsonData);
+  // const [items, setItems] = useState(jsonData);
   const { data = [], setData = () => {}, displayData = [] } = props;
   return (
     <div className={styles.cardlist_container}>
